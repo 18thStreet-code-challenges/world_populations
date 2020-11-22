@@ -1,0 +1,41 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true
+  },
+  "extends": [
+    "standard",
+    "standard-react",
+    "eslint:recommended"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true,
+      "experimentalObjectRestSpread": true
+    },
+    "ecmaVersion": 11,
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "rules": {
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "never"],
+    "one-var": "off",
+    "react/jsx-no-bind": "off",
+    "react/jsx-boolean-value": "off",
+    "jsx-a11y/href-no-hash": "off",
+    "camelcase": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-closing-tag-location": "off",
+    "react/jsx-fragments": "off",
+    "react/jsx-closing-bracket-location": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "16.13.1"
+    }
+  }
+}
