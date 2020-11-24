@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import CountryDAO from 'CountryDAO'
 import './home.css'
+
 const SLIDER_DELAY = 250
 const RESIZE_DELAY = 250
 const CHART_MARGIN = 20
 const SLIDER_WIDTH = 300
+const MINIMUM_YEAR = 1960
+const MAXIMUM_YEAR = 2016
+const NUMBER_OF_YEARS = (MAXIMUM_YEAR - MINIMUM_YEAR) + 1
 
 function debounce1 (fn, ms) {
   let timer
@@ -39,7 +43,7 @@ function debounce3 (fn, ms) {
 const Home = () => {
   const [dao] = useState(new CountryDAO())
   const [hasData, setHasData] = useState(false)
-  const [yearIdx] = useState(0)
+  const [yearIdx, setYearIdx] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)
   const [barHeight] = useState(20)
   // const [minimumYear, setMinimumYear] = useState(1960)
@@ -64,7 +68,7 @@ const Home = () => {
 
     window.addEventListener('resize', debouncedHandleResize)
     setWindowWidth(window.innerWidth - CHART_MARGIN)
-  }, [])
+  }, []) // Call once only
 
   const getData = async () => {
     const json = await dao.retrieve()
@@ -78,8 +82,8 @@ const Home = () => {
       console.log('useEffect on populations')
       setMaxPop(dao.getData()[yearIdx].meta.max)
       setMinPop(dao.getData()[yearIdx].meta.min)
-      setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
-      setMinPopCutoff(dao.getData()[yearIdx].meta.min)
+      // setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
+      // setMinPopCutoff(dao.getData()[yearIdx].meta.min)
     }
   }, [hasData, yearIdx])
 
@@ -136,6 +140,19 @@ const Home = () => {
               setMaxPopCutoff(val)
             }
           }, SLIDER_DELAY)} />
+        <br />
+        <select
+          id='yearIdxSelector' defaultValue={MAXIMUM_YEAR}
+          onChange={(e) => {
+            setYearIdx(e.target.value)
+          }}>
+          {
+            Array.from(Array(NUMBER_OF_YEARS).keys()).map((idx) => {
+              const label = MINIMUM_YEAR + idx + ''
+              return <option value={idx} key={`years${idx}`}>{label}</option>
+            })
+          }
+        </select>
         <div className='card'>
           <div className='card-body'>
             {
