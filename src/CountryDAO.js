@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
 
 const NUM_YEAR_RECORDS = 59
+const AGGREGATE_REGIONS = /ARB|CEB|CSS|EAP|EAR|EAS|ECA|ECS|EMU|EUU|FCS|HIC|HPC|IBD|IDA|IDB|IBT|IDX|LAC|LCN|LDC|LIC|LMC|LMY|LTE|MEA|MIC|MNA|NAC|ODE|OED|OSS|PRE|PST|SAS|SSA|SSF|TEA|TEC|TLA|TMN|TSA|TSS|UMC|WLD/
 class CountryDAO {
   constructor () {
     this.rawData = []
@@ -29,14 +30,13 @@ class CountryDAO {
     const yearKeys = Object.keys(json[0]).filter(key => {
       return /Year_/.test(key)
     })
-    const aggregateRegions = /CEB|CSS|EAP|EAR|EAS|ECA|ECS|EMU|EUU|FCS|HIC|HPC|IBD|IDA|IDB|IBT|IDX|LAC|LCN|LDC|LIC|LMC|LMY|LTE|MEA|MIC|MNA|NAC|ODE|OED|OSS|PRE|PST|SAS|SSA|SSF|TEA|TEC|TLA|TMN|TSA|TSS|UMC|WLD/
 
     const newData = yearKeys.map(year => {
       let min = Number.MAX_SAFE_INTEGER
       let max = Number.MIN_SAFE_INTEGER
       json.forEach(rec => {
         const notNull = !!rec[year]
-        const aggregatePop = aggregateRegions.test(rec.Country_Code)
+        const aggregatePop = AGGREGATE_REGIONS.test(rec.Country_Code)
 
         if (notNull && !aggregatePop) { // i.e. non null
           if (rec[year] < min) min = rec[year]
@@ -45,7 +45,7 @@ class CountryDAO {
       })
       const pop = json.reduce((accumulator, rec) => {
         const notNull = !!rec[year]
-        const aggregatePop = aggregateRegions.test(rec.Country_Code)
+        const aggregatePop = AGGREGATE_REGIONS.test(rec.Country_Code)
         if (notNull && !aggregatePop) { // i.e. non null
           accumulator.push({ Country: rec.Country, Country_Code: rec.Country_Code, value: rec[year] })
         }

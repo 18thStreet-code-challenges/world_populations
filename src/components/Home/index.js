@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CountryDAO from 'CountryDAO'
 import './home.css'
 const SLIDER_DELAY = 250
@@ -36,106 +36,128 @@ function debounce3 (fn, ms) {
     }, ms)
   }
 }
-class Home extends React.Component {
-  constructor () {
-    super()
-    this.state = {
-      dao: new CountryDAO(),
-      hasData: false,
-      yearIdx: 0,
-      windowWidth: 0,
-      barHeight: 20,
-      minimumYear: 1960,
-      maximumYear: 2016
-    }
+const Home = () => {
+  const [dao] = useState(new CountryDAO())
+  const [hasData, setHasData] = useState(false)
+  const [yearIdx] = useState(0)
+  const [windowWidth, setWindowWidth] = useState(0)
+  const [barHeight] = useState(20)
+  // const [minimumYear, setMinimumYear] = useState(1960)
+  // const [maximumYear, setMaximumYear] = useState(2016)
+  const [minPop, setMinPop] = useState(0)
+  const [maxPop, setMaxPop] = useState(0)
+  const [minPopCutoff, setMinPopCutoff] = useState(0)
+  const [maxPopCutoff, setMaxPopCutoff] = useState(0)
 
-    // return () => {
-    //   window.removeEventListener('resize', debouncedHandleResize)
-    // }
-  }
-
-  componentDidMount () {
-    const that = this
-
-    this.getData()
+  useEffect(() => {
+    getData()
       .then(success => {
-        that.setState({ hasData: that.state.dao.hasData() })
-        // console.log(JSON.stringify(this.state.dao.getData()))
+        setHasData(dao.hasData())
+        setMinPopCutoff(dao.getData()[yearIdx].meta.min)
+        setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
       })
       .catch(e => console.log(e))
     const debouncedHandleResize = debounce1(function handleResize () {
-      that.setState({ windowWidth: window.innerWidth - CHART_MARGIN })
+      setWindowWidth(window.innerWidth - CHART_MARGIN)
       console.log(`innerWidth = ${window.innerWidth}`)
     }, RESIZE_DELAY)
 
     window.addEventListener('resize', debouncedHandleResize)
-    this.setState({ windowWidth: window.innerWidth - CHART_MARGIN })
-  }
+    setWindowWidth(window.innerWidth - CHART_MARGIN)
+  }, [])
 
-  async getData () {
-    const dao = this.state.dao
+  const getData = async () => {
     const json = await dao.retrieve()
     dao.validate(json)
     dao.adapt(json)
     return true
   }
 
-  render () {
-    if (!this.state.hasData) {
-      return (<p>Loading...</p>)
+  useEffect(() => {
+    if (hasData) {
+      console.log('useEffect on populations')
+      setMaxPop(dao.getData()[yearIdx].meta.max)
+      setMinPop(dao.getData()[yearIdx].meta.min)
+      setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
+      setMinPopCutoff(dao.getData()[yearIdx].meta.min)
     }
-    const dao = this.state.dao
-    const popData = dao.getData()[this.state.yearIdx].pop
-    // console.log(`dao.getData()[this.state.yearIdx].meta = ${JSON.stringify(dao.getData()[this.state.yearIdx].meta)}`)
-    const max = dao.getData()[this.state.yearIdx].meta.max
-    const min = dao.getData()[this.state.yearIdx].meta.min
-    // console.log(`dao.getData().length = ${dao.getData().length}`)
-    // console.log(`popData().length = ${popData.length}`)
-    const that = this
+  }, [hasData, yearIdx])
 
+  useEffect(() => {
+    console.log(`minPopCutoff (${minPopCutoff}) and/or maxPopCutoff (${maxPopCutoff}) has changed`)
+  }, [minPopCutoff, maxPopCutoff])
+
+  useEffect(() => {
+    console.log(`minPop (${minPop}) and/or maxPop (${maxPop}) has changed`)
+  }, [minPop, maxPop])
+
+  const filterDataByPopRanges = () => {
+    return dao.getData()[yearIdx].pop.filter((item, i) => {
+      const size = item.value
+      return (size > minPopCutoff) && (size < maxPopCutoff)
+    })
+  }
+  const getNewMax = (filteredData) => {
+    return filteredData.reduce((newMax, item) => {
+      if (item.value > newMax) {
+        newMax = item.value
+      }
+      return newMax
+    }, Number.MIN_SAFE_INTEGER)
+  }
+  if (hasData) {
+    const filteredData = filterDataByPopRanges()
+    const newMax = getNewMax(filteredData)
     return (
       <div>
         <label>Minimum Population</label> <input
           type='range'
-          id='minPop' min={min} max={max}
+          id='minPopCutoff' min={minPop} max={maxPop}
+          defaultValue={minPopCutoff}
+          step={1}
           style={{ width: `${SLIDER_WIDTH}px` }}
           onChange={debounce2(() => {
-            const val = document.getElementById('minPop').value
+            const val = document.getElementById('minPopCutoff').value
             console.log(`Min slider value = ${val}`)
-            this.setState({ minimumYear: val })
+            if (val < maxPop) {
+              setMinPopCutoff(val)
+            }
           }, SLIDER_DELAY)} />
         <label>Maximum Population</label> <input
           type='range'
-          id='maxPop' min={min} max={max}
+          id='maxPopCutoff' min={minPop} max={maxPop}
+          defaultValue={maxPopCutoff}
+          step={1}
           style={{ width: `${SLIDER_WIDTH}px` }}
           onChange={debounce3(() => {
-            const val = document.getElementById('maxPop').value
+            const val = document.getElementById('maxPopCutoff').value
             console.log(`Max slider value = ${val}`)
-            this.setState({ maximumYear: val })
+            if (val > minPop) {
+              setMaxPopCutoff(val)
+            }
           }, SLIDER_DELAY)} />
         <div className='card'>
           <div className='card-body'>
             {
-              popData.map((item, i) => {
+              filteredData.map((item, i) => {
                 // console.log(`(${item.value}/${max}) * ${this.state.windowWidth} = ${(item.value / max) * this.state.windowWidth}`)
                 const size = item.value
+                const barWidth = (size / newMax) * windowWidth
                 const style = {
-                  width: (size / max) * that.state.windowWidth,
-                  height: that.state.barHeight + 'px'
+                  width: barWidth,
+                  height: barHeight + 'px'
                 }
                 const text = `${item.Country_Code} - ${item.Country}`
-                const inSlidersRange = (size > that.state.minimumYear) && (size < that.state.maximumYear)
                 return (
-                  inSlidersRange ? (
-                    <div className='bar' style={style} key={'c' + i} title={text}>{text}</div>
-                  ) : null
+                  <div className='bar' style={style} key={'c' + i} title={text}>{text}</div>
                 )
               })
             }
           </div>
         </div>
-      </div>
-    )
+      </div>)
+  } else {
+    return (<p>Loading...</p>)
   }
 }
 export default Home
