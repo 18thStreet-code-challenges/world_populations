@@ -1,36 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import CountryDAO from 'CountryDAO'
+import PopSlider from 'components/PopSlider'
+import YearSelector from 'components/YearSelector'
 import './home.css'
 
-const SLIDER_DELAY = 250
 const RESIZE_DELAY = 250
 const CHART_MARGIN = 20
-const SLIDER_WIDTH = 300
-const MINIMUM_YEAR = 1960
-const MAXIMUM_YEAR = 2016
-const NUMBER_OF_YEARS = (MAXIMUM_YEAR - MINIMUM_YEAR) + 1
 
 function debounce1 (fn, ms) {
-  let timer
-  return () => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      timer = null
-      fn.apply(this, arguments)
-    }, ms)
-  }
-}
-function debounce2 (fn, ms) {
-  let timer
-  return () => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      timer = null
-      fn.apply(this, arguments)
-    }, ms)
-  }
-}
-function debounce3 (fn, ms) {
   let timer
   return () => {
     clearTimeout(timer)
@@ -46,8 +23,6 @@ const Home = () => {
   const [yearIdx, setYearIdx] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)
   const [barHeight] = useState(20)
-  // const [minimumYear, setMinimumYear] = useState(1960)
-  // const [maximumYear, setMaximumYear] = useState(2016)
   const [minPop, setMinPop] = useState(0)
   const [maxPop, setMaxPop] = useState(0)
   const [minPopCutoff, setMinPopCutoff] = useState(0)
@@ -82,18 +57,8 @@ const Home = () => {
       console.log('useEffect on populations')
       setMaxPop(dao.getData()[yearIdx].meta.max)
       setMinPop(dao.getData()[yearIdx].meta.min)
-      // setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
-      // setMinPopCutoff(dao.getData()[yearIdx].meta.min)
     }
   }, [hasData, yearIdx])
-
-  useEffect(() => {
-    console.log(`minPopCutoff (${minPopCutoff}) and/or maxPopCutoff (${maxPopCutoff}) has changed`)
-  }, [minPopCutoff, maxPopCutoff])
-
-  useEffect(() => {
-    console.log(`minPop (${minPop}) and/or maxPop (${maxPop}) has changed`)
-  }, [minPop, maxPop])
 
   const filterDataByPopRanges = () => {
     return dao.getData()[yearIdx].pop.filter((item, i) => {
@@ -114,45 +79,26 @@ const Home = () => {
     const newMax = getNewMax(filteredData)
     return (
       <div>
-        <label>Minimum Population</label> <input
-          type='range'
-          id='minPopCutoff' min={minPop} max={maxPop}
-          defaultValue={minPopCutoff}
-          step={1}
-          style={{ width: `${SLIDER_WIDTH}px` }}
-          onChange={debounce2(() => {
+        <PopSlider
+          label='Minimum Population' min={minPop} max={maxPop} cutoff={minPopCutoff} id='minPopCutoff'
+          handler={() => {
             const val = document.getElementById('minPopCutoff').value
             console.log(`Min slider value = ${val}`)
             if (val < maxPop) {
               setMinPopCutoff(val)
             }
-          }, SLIDER_DELAY)} />
-        <label>Maximum Population</label> <input
-          type='range'
-          id='maxPopCutoff' min={minPop} max={maxPop}
-          defaultValue={maxPopCutoff}
-          step={1}
-          style={{ width: `${SLIDER_WIDTH}px` }}
-          onChange={debounce3(() => {
+          }} />
+        <PopSlider
+          label='Maximum Population' min={minPop} max={maxPop} cutoff={maxPopCutoff} id='maxPopCutoff'
+          handler={() => {
             const val = document.getElementById('maxPopCutoff').value
             console.log(`Max slider value = ${val}`)
             if (val > minPop) {
               setMaxPopCutoff(val)
             }
-          }, SLIDER_DELAY)} />
+          }} />
         <br />
-        <select
-          id='yearIdxSelector' defaultValue={MAXIMUM_YEAR}
-          onChange={(e) => {
-            setYearIdx(e.target.value)
-          }}>
-          {
-            Array.from(Array(NUMBER_OF_YEARS).keys()).map((idx) => {
-              const label = MINIMUM_YEAR + idx + ''
-              return <option value={idx} key={`years${idx}`}>{label}</option>
-            })
-          }
-        </select>
+        <YearSelector stateHandler={setYearIdx} />
         <div className='card'>
           <div className='card-body'>
             {
