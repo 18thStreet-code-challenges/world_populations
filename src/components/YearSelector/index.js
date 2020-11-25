@@ -20,7 +20,6 @@ const YearSelector = ({ stateHandler }) => {
         })
       }
     </select>
-
   )
 }
 export default YearSelector

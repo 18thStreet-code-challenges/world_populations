@@ -6,6 +6,8 @@ import './home.css'
 
 const RESIZE_DELAY = 250
 const CHART_MARGIN = 20
+const BAR_COLORS = [{ bg: '#003f5c', fg: 'white' }, { bg: '#bc5090', fg: 'white' }, { bg: '#ffa600', fg: 'black' }]
+const HORIZONTAL_CHAR_WIDTH = 8
 
 function debounce1 (fn, ms) {
   let timer
@@ -17,6 +19,8 @@ function debounce1 (fn, ms) {
     }, ms)
   }
 }
+// const numberWithCommas = x => x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+const millionize = x => (x / 1000000).toFixed(3)
 const Home = () => {
   const [dao] = useState(new CountryDAO())
   const [hasData, setHasData] = useState(false)
@@ -108,12 +112,31 @@ const Home = () => {
                 const barWidth = (size / newMax) * windowWidth
                 const style = {
                   width: barWidth,
-                  height: barHeight + 'px'
+                  height: barHeight + 'px',
+                  backgroundColor: BAR_COLORS[i % 3].bg,
+                  color: BAR_COLORS[i % 3].fg
                 }
-                const text = `${item.Country_Code} - ${item.Country}`
-                return (
-                  <div className='bar' style={style} key={'c' + i} title={text}>{text}</div>
-                )
+                const text = `${item.Country_Code} - ${item.Country} - ${millionize(size)} mil`
+                const textPixels = text.length * HORIZONTAL_CHAR_WIDTH
+                let bar
+                switch (true) {
+                case barWidth > textPixels:
+                  bar = (
+                    <div className='bar' style={style} key={'c' + i} title={text}>
+                      <div className='name-internal'>{text}</div>
+                    </div>
+                  )
+                  break
+                case barWidth <= textPixels:
+                default:
+                  bar = (
+                    <div className='newline'>
+                      <div className='bar shortbar' style={style} key={'c' + i} title={text} />
+                      <div className='name-external'>{text}</div>
+                    </div>
+                  )
+                }
+                return bar
               })
             }
           </div>
