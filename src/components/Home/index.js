@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import CountryDAO from 'CountryDAO'
+import CountryDAO from 'lib/CountryDAO'
+import Util from 'lib/Util'
 import PopSlider from 'components/PopSlider'
 import YearSelector from 'components/YearSelector'
 import './home.css'
@@ -9,18 +10,7 @@ const CHART_MARGIN = 20
 const BAR_COLORS = [{ bg: '#003f5c', fg: 'white' }, { bg: '#bc5090', fg: 'white' }, { bg: '#ffa600', fg: 'black' }]
 const HORIZONTAL_CHAR_WIDTH = 8
 
-function debounce1 (fn, ms) {
-  let timer
-  return () => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      timer = null
-      fn.apply(this, arguments)
-    }, ms)
-  }
-}
-// const numberWithCommas = x => x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
-const millionize = x => (x / 1000000).toFixed(3)
+const debounce = Util.debounceFactory()
 const Home = () => {
   const [dao] = useState(new CountryDAO())
   const [hasData, setHasData] = useState(false)
@@ -40,7 +30,7 @@ const Home = () => {
         setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
       })
       .catch(e => console.log(e))
-    const debouncedHandleResize = debounce1(function handleResize () {
+    const debouncedHandleResize = debounce(function handleResize () {
       setWindowWidth(window.innerWidth - CHART_MARGIN)
       console.log(`innerWidth = ${window.innerWidth}`)
     }, RESIZE_DELAY)
@@ -116,7 +106,7 @@ const Home = () => {
                   backgroundColor: BAR_COLORS[i % 3].bg,
                   color: BAR_COLORS[i % 3].fg
                 }
-                const text = `${item.Country_Code} - ${item.Country} - ${millionize(size)} mil`
+                const text = `${item.Country_Code} - ${item.Country} - ${Util.millionize(size)} mil`
                 const textPixels = text.length * HORIZONTAL_CHAR_WIDTH
                 let bar
                 switch (true) {
