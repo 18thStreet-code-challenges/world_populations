@@ -51,9 +51,12 @@ const Home = () => {
 
   useEffect(() => {
     if (hasData) {
-      console.log('useEffect on populations')
-      setMaxPop(dao.getData()[yearIdx].meta.max)
-      setMinPop(dao.getData()[yearIdx].meta.min)
+      setTimeout(() => {
+        setMaxPop(dao.getData()[yearIdx].meta.max)
+        setMinPop(dao.getData()[yearIdx].meta.min)
+        setMinPopCutoff(dao.getData()[yearIdx].meta.min)
+        setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
+      }, 300)
     }
   }, [hasData, yearIdx])
 
