@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import ReactTooltip from 'react-tooltip'
 import CountryDAO from 'lib/CountryDAO'
 import Util from 'lib/Util'
 import PopSlider from 'components/PopSlider'
@@ -144,12 +145,18 @@ const Home = () => {
                 switch (true) {
                 case skinnyBars:
                   bar = (
-                    <div className='bar' style={style} key={'c' + i} title={text} />
+                    <div>
+                      <div className='bar' style={style} key={'c' + i} alt={text} data-tip data-for={`bar${i}`} />
+                      <ReactTooltip id={`bar${i}`} place='bottom' type='dark' effect='solid'>
+                        <span>{text}</span>
+                      </ReactTooltip>
+                    </div>
                   )
                   break
                 case barWidth > textPixels:
                   bar = (
-                    <div className='bar' style={style} key={'c' + i} title={text}>
+                    <div
+                      className='bar' style={style} key={'c' + i} title={text}>
                       <div className='name-internal'>{text}</div>
                     </div>
                   )
@@ -158,7 +165,8 @@ const Home = () => {
                 default:
                   bar = (
                     <div className='newline'>
-                      <div className='bar shortbar' style={style} key={'c' + i} title={text} />
+                      <div
+                        className='bar shortbar' style={style} key={'c' + i} title={text} />
                       <div className='name-external'>{text}</div>
                     </div>
                   )
