@@ -79,8 +79,10 @@ const Home = () => {
     const filteredData = filterDataByPopRanges()
     const newMax = getNewMax(filteredData)
     return (
-      <div>
-        <label>Census Year:</label> <YearSelector stateHandler={setYearIdx} />
+      <div className='chart-container'>
+        <div className='year-select'>
+          <label>Census Year:</label> <YearSelector stateHandler={setYearIdx} />
+        </div>
         <div className='accordion'>
           <div className='card'>
             <div className='card-header' id='headingOne'>
@@ -91,7 +93,7 @@ const Home = () => {
               </h2>
             </div>
 
-            <div id='collapseOne' className='collapse hide' aria-labelledby='headingOne' data-parent='#accordionExample'>
+            <div id='collapseOne' className='collapse hide bonus-controls' aria-labelledby='headingOne'>
               <div className='card-body'>
                 <PopSlider
                   label='Minimum Population' min={minPop} max={maxPop} cutoff={minPopCutoff} id='minPopCutoff'

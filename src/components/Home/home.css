@@ -1,3 +1,14 @@
+.chart-container {
+    padding-top: 20px;
+}
+.year-select {
+    text-align: center;
+    font-size: 24px;
+    padding: 0 30px;
+}
+.bonus-controls {
+    padding: 10px;
+}
 .bar {
     white-space: nowrap;
     cursor: pointer;
@@ -23,7 +34,7 @@
 }
 /* bootstrap overrides  */
 .card {
-    margin: 20px 10px;
+    margin: 20px 10px; /* important:  the left/right margins must be half of CHART_MARGINS in <Home> */
 }
 .card-body {
     padding-left: 0;
