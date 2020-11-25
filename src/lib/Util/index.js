@@ -14,8 +14,11 @@ const debounceFactory = () => {
   }
 }
 const millionize = x => (x / 1000000).toFixed(3)
+const numberWithCommas = x => x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+
 const Util = {
   debounceFactory: debounceFactory,
-  millionize: millionize
+  millionize: millionize,
+  numberWithCommas: numberWithCommas
 }
 export default Util

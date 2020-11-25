@@ -76,33 +76,52 @@ const Home = () => {
     const newMax = getNewMax(filteredData)
     return (
       <div>
-        <PopSlider
-          label='Minimum Population' min={minPop} max={maxPop} cutoff={minPopCutoff} id='minPopCutoff'
-          handler={() => {
-            const val = document.getElementById('minPopCutoff').value
-            console.log(`Min slider value = ${val}`)
-            if (val < maxPop) {
-              setMinPopCutoff(val)
-            }
-          }} />
-        <PopSlider
-          label='Maximum Population' min={minPop} max={maxPop} cutoff={maxPopCutoff} id='maxPopCutoff'
-          handler={() => {
-            const val = document.getElementById('maxPopCutoff').value
-            console.log(`Max slider value = ${val}`)
-            if (val > minPop) {
-              setMaxPopCutoff(val)
-            }
-          }} />
-        <input
-          type='checkbox' checked={skinnyBars} onChange={(e) => {
-            const checked = e.target.checked
-            setSkinnyBars(checked)
-            setBarHeight(checked ? SKINNY_BARS : WIDE_BARS)
-            console.log(`checkbox value = ${e.target.checked}`)
-          }} />
-        <br />
-        <YearSelector stateHandler={setYearIdx} />
+        <label>Census Year:</label> <YearSelector stateHandler={setYearIdx} />
+        <div className='accordion'>
+          <div className='card'>
+            <div className='card-header' id='headingOne'>
+              <h2 className='mb-0'>
+                <button className='btn btn-link' type='button' data-toggle='collapse' data-target='#collapseOne' aria-expanded='true' aria-controls='collapseOne'>
+                  Bonus Controls
+                </button>
+              </h2>
+            </div>
+
+            <div id='collapseOne' className='collapse hide' aria-labelledby='headingOne' data-parent='#accordionExample'>
+              <div className='card-body'>
+                <PopSlider
+                  label='Minimum Population' min={minPop} max={maxPop} cutoff={minPopCutoff} id='minPopCutoff'
+                  handler={() => {
+                    const val = document.getElementById('minPopCutoff').value
+                    console.log(`Min slider value = ${val}`)
+                    if (val < maxPop) {
+                      setMinPopCutoff(val)
+                    }
+                  }} />
+                <span className='popValue'>{Util.numberWithCommas(minPopCutoff)}</span>
+                <br />
+                <PopSlider
+                  label='Maximum Population' min={minPop} max={maxPop} cutoff={maxPopCutoff} id='maxPopCutoff'
+                  handler={() => {
+                    const val = document.getElementById('maxPopCutoff').value
+                    console.log(`Max slider value = ${val}`)
+                    if (val > minPop) {
+                      setMaxPopCutoff(val)
+                    }
+                  }} />
+                <span className='popValue'>{Util.numberWithCommas(maxPopCutoff)}</span>
+                <br />
+                <label>Skinny Bars:</label> <input
+                  type='checkbox' checked={skinnyBars} onChange={(e) => {
+                    const checked = e.target.checked
+                    setSkinnyBars(checked)
+                    setBarHeight(checked ? SKINNY_BARS : WIDE_BARS)
+                    console.log(`checkbox value = ${e.target.checked}`)
+                  }} />
+              </div>
+            </div>
+          </div>
+        </div>
         <div className='card'>
           <div className='card-body'>
             {

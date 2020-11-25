@@ -37,3 +37,6 @@
 .value {
     float: right;
 }
+.popValue {
+    margin-left: 7px;
+}

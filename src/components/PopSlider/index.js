@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import Util from 'lib/Util'
 import './popSlider.css'
 const SLIDER_DELAY = 250
-const SLIDER_WIDTH = 300
+const SLIDER_WIDTH = 400
 const debounce = Util.debounceFactory()
 
 // eslint-disable-next-line react/prop-types
