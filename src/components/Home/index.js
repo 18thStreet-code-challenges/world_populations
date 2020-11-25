@@ -9,6 +9,8 @@ const RESIZE_DELAY = 250
 const CHART_MARGIN = 20
 const BAR_COLORS = [{ bg: '#003f5c', fg: 'white' }, { bg: '#bc5090', fg: 'white' }, { bg: '#ffa600', fg: 'black' }]
 const HORIZONTAL_CHAR_WIDTH = 8
+const WIDE_BARS = 20
+const SKINNY_BARS = 5
 
 const debounce = Util.debounceFactory()
 const Home = () => {
@@ -16,7 +18,8 @@ const Home = () => {
   const [hasData, setHasData] = useState(false)
   const [yearIdx, setYearIdx] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)
-  const [barHeight] = useState(20)
+  const [barHeight, setBarHeight] = useState(WIDE_BARS)
+  const [skinnyBars, setSkinnyBars] = useState(false)
   const [minPop, setMinPop] = useState(0)
   const [maxPop, setMaxPop] = useState(0)
   const [minPopCutoff, setMinPopCutoff] = useState(0)
@@ -91,6 +94,13 @@ const Home = () => {
               setMaxPopCutoff(val)
             }
           }} />
+        <input
+          type='checkbox' checked={skinnyBars} onChange={(e) => {
+            const checked = e.target.checked
+            setSkinnyBars(checked)
+            setBarHeight(checked ? SKINNY_BARS : WIDE_BARS)
+            console.log(`checkbox value = ${e.target.checked}`)
+          }} />
         <br />
         <YearSelector stateHandler={setYearIdx} />
         <div className='card'>
@@ -110,6 +120,11 @@ const Home = () => {
                 const textPixels = text.length * HORIZONTAL_CHAR_WIDTH
                 let bar
                 switch (true) {
+                case skinnyBars:
+                  bar = (
+                    <div className='bar' style={style} key={'c' + i} title={text} />
+                  )
+                  break
                 case barWidth > textPixels:
                   bar = (
                     <div className='bar' style={style} key={'c' + i} title={text}>
