@@ -164,7 +164,7 @@ const Home = () => {
                 case barWidth <= textPixels:
                 default:
                   bar = (
-                    <div className='newline'>
+                    <div>
                       <div
                         className='bar shortbar' style={style} key={'c' + i} title={text} />
                       <div className='name-external'>{text}</div>
