@@ -64,7 +64,7 @@ const Home = () => {
   const filterDataByPopRanges = () => {
     return dao.getData()[yearIdx].pop.filter((item, i) => {
       const size = item.value
-      return (size > minPopCutoff) && (size < maxPopCutoff)
+      return (size >= minPopCutoff) && (size <= maxPopCutoff)
     })
   }
   const getNewMax = (filteredData) => {
