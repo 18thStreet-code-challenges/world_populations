@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import ReactTooltip from 'react-tooltip'
-import { Slider } from '@material-ui/core'
-import Tooltip from '@material-ui/core/Tooltip'
-import { makeStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
+// import Tooltip from '@material-ui/core/Tooltip'
 import CountryDAO from 'lib/CountryDAO'
 import Util from 'lib/Util'
 import YearSelector from 'components/YearSelector'
+import BonusControls from 'components/BonusControls'
 import './home.css'
 
 const RESIZE_DELAY = 250
@@ -14,7 +12,6 @@ const CHART_MARGIN = 20
 const BAR_COLORS = [{ bg: '#003f5c', fg: 'white' }, { bg: '#bc5090', fg: 'white' }, { bg: '#ffa600', fg: 'black' }]
 const HORIZONTAL_CHAR_WIDTH = 8
 const WIDE_BARS = 20
-const SKINNY_BARS = 5
 
 const debounce = Util.debounceFactory()
 const Home = () => {
@@ -28,22 +25,6 @@ const Home = () => {
   const [maxPop, setMaxPop] = useState(0)
   const [minPopCutoff, setMinPopCutoff] = useState(0)
   const [maxPopCutoff, setMaxPopCutoff] = useState(0)
-  const sliderStyles = makeStyles({
-    root: {
-      width: 600
-    }
-  })
-  const sliderClasses = sliderStyles()
-  const ValueLabelComponent = (props) => {
-    // eslint-disable-next-line react/prop-types
-    const { children, open, value } = props
-
-    return (
-      <Tooltip open={open} enterTouchDelay={0} placement='top' title={value}>
-        {children}
-      </Tooltip>
-    )
-  }
   useEffect(() => {
     getData()
       .then(success => {
@@ -101,56 +82,11 @@ const Home = () => {
         <div className='year-select'>
           <label>Census Year:</label> <YearSelector stateHandler={setYearIdx} />
         </div>
-        <div className='accordion'>
-          <div className='card'>
-            <div className='card-header' id='headingOne'>
-              <h2 className='mb-0'>
-                <button className='btn btn-link' type='button' data-toggle='collapse' data-target='#collapseOne' aria-expanded='true' aria-controls='collapseOne'>
-                  Bonus Controls
-                </button>
-              </h2>
-            </div>
-
-            <div id='collapseOne' className='collapse hide bonus-controls' aria-labelledby='headingOne'>
-              <div className='card-body'>
-                <div style={{ display: 'inline-block' }}>
-                  <div className={sliderClasses.root}>
-                    <Typography id='range-slider' gutterBottom>
-                      Population Range (in mil)
-                    </Typography>
-                    <Slider
-                      min={minPop}
-                      max={maxPop}
-                      value={[minPopCutoff, maxPopCutoff]}
-                      onChange={(e, newValue) => {
-                        setMinPopCutoff(newValue[0])
-                        setMaxPopCutoff(newValue[1])
-                      }}
-                      ValueLabelComponent={ValueLabelComponent}
-                      valueLabelFormat={x => {
-                        return <span>{Util.millionize(x)}</span>
-                      }}
-                      dual={true}
-                      aria-labelledby='range-slider'
-                      getAriaValueText={v => v}
-                      ThumbComponent='span'
-                    />
-                  </div>
-                </div>
-                <div className='slider-right-label'>
-                  {`${Util.numberWithCommas(minPopCutoff)} to ${Util.numberWithCommas(maxPopCutoff)}`}
-                </div>
-                <br />
-                <label>Skinny Bars:</label> <input
-                  type='checkbox' checked={skinnyBars} onChange={(e) => {
-                    const checked = e.target.checked
-                    setSkinnyBars(checked)
-                    setBarHeight(checked ? SKINNY_BARS : WIDE_BARS)
-                  }} />
-              </div>
-            </div>
-          </div>
-        </div>
+        <BonusControls
+          minPop={minPop} maxPop={maxPop} minPopCutoff={minPopCutoff}
+          maxPopCutoff={maxPopCutoff} skinnyBars={skinnyBars} setMinPopCutoff={setMinPopCutoff}
+          setMaxPopCutoff={setMaxPopCutoff} setSkinnyBars={setSkinnyBars}
+          setBarHeight={setBarHeight} />
         <div className='card'>
           <div className='card-body'>
             {
