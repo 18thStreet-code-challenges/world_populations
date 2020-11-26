@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 // import Tooltip from '@material-ui/core/Tooltip'
 import Util from '../../lib/Util'
 import Tooltip from '@material-ui/core/Tooltip'
+import './bonusControls.css'
 
 const WIDE_BARS = 20
 const SKINNY_BARS = 5

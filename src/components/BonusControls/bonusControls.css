@@ -1,0 +1,9 @@
+.bonus-controls {
+    padding: 10px;
+}
+.slider-right-label {
+    display: inline-block;
+    margin-left: 12px;
+    position: relative;
+    bottom: 7px;
+}

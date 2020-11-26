@@ -26,12 +26,6 @@
     float: right;
     margin-right: 10px;
 }
-.value {
-    float: right;
-}
-.popValue {
-    margin-left: 7px;
-}
 /* bootstrap overrides  */
 .card {
     margin: 20px 10px; /* important:  the left/right margins must be half of CHART_MARGINS in <Home> */
@@ -40,9 +34,3 @@
     padding-left: 0;
 }
 /* end bootstrap overrides */
-.slider-right-label {
-    display: inline-block;
-    margin-left: 12px;
-    position: relative;
-    bottom: 7px;
-}
