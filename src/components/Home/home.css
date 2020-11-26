@@ -40,3 +40,9 @@
     padding-left: 0;
 }
 /* end bootstrap overrides */
+.slider-right-label {
+    display: inline-block;
+    margin-left: 12px;
+    position: relative;
+    bottom: 7px;
+}

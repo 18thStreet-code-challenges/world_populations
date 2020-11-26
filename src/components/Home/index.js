@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import ReactTooltip from 'react-tooltip'
+import { Slider } from '@material-ui/core'
+import Tooltip from '@material-ui/core/Tooltip'
+import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import CountryDAO from 'lib/CountryDAO'
 import Util from 'lib/Util'
-import PopSlider from 'components/PopSlider'
 import YearSelector from 'components/YearSelector'
 import './home.css'
 
@@ -25,7 +28,22 @@ const Home = () => {
   const [maxPop, setMaxPop] = useState(0)
   const [minPopCutoff, setMinPopCutoff] = useState(0)
   const [maxPopCutoff, setMaxPopCutoff] = useState(0)
+  const sliderStyles = makeStyles({
+    root: {
+      width: 600
+    }
+  })
+  const sliderClasses = sliderStyles()
+  const ValueLabelComponent = (props) => {
+    // eslint-disable-next-line react/prop-types
+    const { children, open, value } = props
 
+    return (
+      <Tooltip open={open} enterTouchDelay={0} placement='top' title={value}>
+        {children}
+      </Tooltip>
+    )
+  }
   useEffect(() => {
     getData()
       .then(success => {
@@ -95,34 +113,39 @@ const Home = () => {
 
             <div id='collapseOne' className='collapse hide bonus-controls' aria-labelledby='headingOne'>
               <div className='card-body'>
-                <PopSlider
-                  label='Minimum Population' min={minPop} max={maxPop} cutoff={minPopCutoff} id='minPopCutoff'
-                  handler={() => {
-                    const val = document.getElementById('minPopCutoff').value
-                    console.log(`Min slider value = ${val}`)
-                    if (val < maxPop) {
-                      setMinPopCutoff(val)
-                    }
-                  }} />
-                <span className='popValue'>{Util.numberWithCommas(minPopCutoff)}</span>
-                <br />
-                <PopSlider
-                  label='Maximum Population' min={minPop} max={maxPop} cutoff={maxPopCutoff} id='maxPopCutoff'
-                  handler={() => {
-                    const val = document.getElementById('maxPopCutoff').value
-                    console.log(`Max slider value = ${val}`)
-                    if (val > minPop) {
-                      setMaxPopCutoff(val)
-                    }
-                  }} />
-                <span className='popValue'>{Util.numberWithCommas(maxPopCutoff)}</span>
+                <div style={{ display: 'inline-block' }}>
+                  <div className={sliderClasses.root}>
+                    <Typography id='range-slider' gutterBottom>
+                      Population Range (in mil)
+                    </Typography>
+                    <Slider
+                      min={minPop}
+                      max={maxPop}
+                      value={[minPopCutoff, maxPopCutoff]}
+                      onChange={(e, newValue) => {
+                        setMinPopCutoff(newValue[0])
+                        setMaxPopCutoff(newValue[1])
+                      }}
+                      ValueLabelComponent={ValueLabelComponent}
+                      valueLabelFormat={x => {
+                        return <span>{Util.millionize(x)}</span>
+                      }}
+                      dual={true}
+                      aria-labelledby='range-slider'
+                      getAriaValueText={v => v}
+                      ThumbComponent='span'
+                    />
+                  </div>
+                </div>
+                <div className='slider-right-label'>
+                  {`${Util.numberWithCommas(minPopCutoff)} to ${Util.numberWithCommas(maxPopCutoff)}`}
+                </div>
                 <br />
                 <label>Skinny Bars:</label> <input
                   type='checkbox' checked={skinnyBars} onChange={(e) => {
                     const checked = e.target.checked
                     setSkinnyBars(checked)
                     setBarHeight(checked ? SKINNY_BARS : WIDE_BARS)
-                    console.log(`checkbox value = ${e.target.checked}`)
                   }} />
               </div>
             </div>
@@ -147,8 +170,8 @@ const Home = () => {
                 switch (true) {
                 case skinnyBars:
                   bar = (
-                    <div>
-                      <div className='bar' style={style} key={'c' + i} alt={text} data-tip data-for={`bar${i}`} />
+                    <div key={'c' + i}>
+                      <div className='bar' style={style} alt={text} data-tip data-for={`bar${i}`} />
                       <ReactTooltip id={`bar${i}`} place='bottom' type='dark' effect='solid'>
                         <span>{text}</span>
                       </ReactTooltip>
@@ -166,9 +189,9 @@ const Home = () => {
                 case barWidth <= textPixels:
                 default:
                   bar = (
-                    <div>
+                    <div key={'c' + i}>
                       <div
-                        className='bar shortbar' style={style} key={'c' + i} title={text} />
+                        className='bar shortbar' style={style} title={text} />
                       <div className='name-external'>{text}</div>
                     </div>
                   )
