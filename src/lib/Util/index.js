@@ -20,5 +20,6 @@ const Util = {
   debounceFactory: debounceFactory,
   millionize: millionize,
   numberWithCommas: numberWithCommas
+
 }
 export default Util
