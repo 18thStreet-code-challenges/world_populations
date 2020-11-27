@@ -1,6 +1,7 @@
 import Util from '../../lib/Util'
-import ReactTooltip from 'react-tooltip'
+// import ReactTooltip from 'react-tooltip'
 import React from 'react'
+import './bar.css'
 
 const BAR_COLORS = [{ bg: '#003f5c', fg: 'white' }, { bg: '#bc5090', fg: 'white' }, { bg: '#ffa600', fg: 'black' }]
 const HORIZONTAL_CHAR_WIDTH = 8
@@ -13,7 +14,8 @@ const Bar = ({ population, idx, newMax, windowWidth, barHeight, skinnyBars }) =>
     width: barWidth,
     height: barHeight + 'px',
     backgroundColor: BAR_COLORS[idx % 3].bg,
-    color: BAR_COLORS[idx % 3].fg
+    color: BAR_COLORS[idx % 3].fg,
+    marginBottom: skinnyBars ? '0px' : '2px'
   }
   const text = `${population.Country_Code} - ${population.Country} - ${Util.millionize(size)} mil`
   const textPixels = text.length * HORIZONTAL_CHAR_WIDTH
@@ -22,10 +24,7 @@ const Bar = ({ population, idx, newMax, windowWidth, barHeight, skinnyBars }) =>
   case skinnyBars:
     bar = (
       <div key={'c' + idx}>
-        <div className='bar' style={style} alt={text} data-tip data-for={`bar${idx}`} />
-        <ReactTooltip id={`bar${idx}`} place='bottom' type='dark' effect='solid'>
-          <span>{text}</span>
-        </ReactTooltip>
+        <div className='bar' style={style} title={text} data-tip data-for={`bar${idx}`} />
       </div>
     )
     break

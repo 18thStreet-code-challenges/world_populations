@@ -8,7 +8,8 @@ import Tooltip from '@material-ui/core/Tooltip'
 import './bonusControls.css'
 
 const WIDE_BARS = 20
-const SKINNY_BARS = 5
+const SKINNY_BARS = 1
+const SLIDER_WIDTH = 750
 
 const BonusControls = ({
 // eslint-disable-next-line react/prop-types
@@ -18,7 +19,7 @@ const BonusControls = ({
 }) => {
   const sliderStyles = makeStyles({
     root: {
-      width: 600
+      width: SLIDER_WIDTH
     }
   })
   const sliderClasses = sliderStyles()
@@ -76,7 +77,7 @@ const BonusControls = ({
               {`${Util.numberWithCommas(minPopCutoff)} to ${Util.numberWithCommas(maxPopCutoff)}`}
             </div>
             <br />
-            <label>Skinny Bars:</label> <input
+            <label>Bird's Eye View:</label> <input
               type='checkbox' checked={skinnyBars} onChange={(e) => {
                 const checked = e.target.checked
                 setSkinnyBars(checked)
