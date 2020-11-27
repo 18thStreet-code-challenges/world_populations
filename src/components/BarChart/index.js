@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import ReactTooltip from 'react-tooltip'
 import Util from 'lib/Util'
+import './barChart.css'
 
 const BAR_COLORS = [{ bg: '#003f5c', fg: 'white' }, { bg: '#bc5090', fg: 'white' }, { bg: '#ffa600', fg: 'black' }]
 const HORIZONTAL_CHAR_WIDTH = 8

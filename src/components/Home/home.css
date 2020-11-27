@@ -9,23 +9,7 @@
 .bonus-controls {
     padding: 10px;
 }
-.bar {
-    white-space: nowrap;
-    cursor: pointer;
-    margin-bottom: 2px;
-    clear: both;
-}
-.shortbar {
-    float: left;
-}
-.name-external {
-    float: left;
-    margin-left: 10px;
-}
-.name-internal {
-    float: right;
-    margin-right: 10px;
-}
+
 /* bootstrap overrides  */
 .card {
     margin: 20px 10px; /* important:  the left/right margins must be half of CHART_MARGINS in <Home> */

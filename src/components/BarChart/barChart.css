@@ -1,0 +1,17 @@
+.bar {
+    white-space: nowrap;
+    cursor: pointer;
+    margin-bottom: 2px;
+    clear: both;
+}
+.shortbar {
+    float: left;
+}
+.name-external {
+    float: left;
+    margin-left: 10px;
+}
+.name-internal {
+    float: right;
+    margin-right: 10px;
+}
