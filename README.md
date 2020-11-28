@@ -1,6 +1,7 @@
 # World Populations App
 
-This application was written as a programming challenge from [Seegrid](https://seegrid.com/) in November, 2020.  The code is at the public repo [gregsandell/world_populations](https://github.com/gregsandell/world_populations).  The instructions for the challenge are stored in the project at `./doc/Code_Challenge_FE_V1.pdf`.
+This application was written as a programming challenge from [Seegrid](https://seegrid.com/) in November, 2020. The challenge instructions are [here](https://github.com/gregsandell/world_populations/blob/dev/doc/Problem_Statement_Country_population_chart.pdf).  The code for the solution is at the public repo [gregsandell/world_populations](https://github.com/gregsandell/world_populations).
+
 ## Assumptions
 1. Have Node.js v.14 installed with npm
 2. Ports 3000 and 5000 are free on your computer
@@ -30,11 +31,13 @@ import Tag from '../containers/Tag'
 ## Special Challenges & Choices
 This covers challenges I encountered, or choices I made that went beyond what was specifically stated in the instructions.  Note that there also inline comments in the code that describe decisions on a more granular level.
 
-1. The source dataset includes several aggregate populations, such as 
-2. Debouncing is by necessity a stateful mechanism.  The challenge is to prevent the debounce rendering from recreating the input field, because it will recreate the debounce with a fresh state. Seeing the complexity of solving this, I chose to go with the proven [react-debounce-input](https://www.npmjs.com/package/react-debounce-input) library.
+1. The source dataset includes several non-country, aggregate populations, such as *Arab World* (ARB) and *High income* (HIC).  Although these are interesting I feel that they skew the results from the majority of country-based data, so I excluded them.
+2. I reverse-sorted the years (2016 down to 1960) and made the latest year the default population.
 3. In React Hooks, `useEffect()` calls come AFTER rendering, but in several cases my *useEffect()*'s make state variable changes, after which a render is desired.  I was able to accomplish this by wrapping the state changes in a short `setTimeout()`. I am not sure how reliable this technique is. 
-6. The Twitter API param `max_id` was used to ensure that pressing *Load more* caused subsequent tweets to be loeaded and avoiding duplications.  The `id` field in the API uses integers larger than Javascript allows, so in order to perform math I had to use [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt).
-7. I made a hashtag in the *Filter by hashtag* panel change color on click to show that it was selected.  The user can deselect the tag by clicking again.  
-8. For simplicity I allow only one hashtag selectable at a time.  An *alert()* warns the user if they try select two.
-9. The Twitter search api returns results for text found anywhere in the tweet, not just the text.  As a result, the text displayed in the output does not necessarily include the searched text.
+4. I added two controls not specified in the original challenge, A date slider to control the range of populations included, and a *Bird's Eye View* checkbox.  The become visible when opening the *Bonus Features* accordion tab.  The specifics of these features are described with tooltip text in the live app.
+5. Each bar contains a *title* attribute which will identify the bar on rollover.  Because browsers delay the appears of the title, it is not an effective user experience.  A tooltip rollover from [Material-ui](https://material-ui.com/components/tooltips/) was considered, but due to the size of the dataset, it imposed performance problems on the UI and was abandoned.
 
+## Opportunities for improvement
+1. The aggregate data (see above) could be included and included or suppressed according to a filter control. 
+2. A delta plot showing the population differences between one year and another would be an interesting extra feature.
+3. Improvement for the population slider (Bonus Feature):  because the large population countries (China, India, etc) are orders of magnitude larger than the majority of smaller-population countries, the slider would be more effective if it worked on a log scale.
