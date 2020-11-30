@@ -14,6 +14,7 @@ This application was written as a programming challenge from [Seegrid](https://s
 
 
 ## Technology Choices
+1. *React* for the frontend stack
 1. *create-react-app* for scaffolding
 2. Node.js *Express* for proxying requests to the Twitter REST api (port 5000)
 3. *fetch* api for AJAX calls

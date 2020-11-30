@@ -9,11 +9,7 @@ class CountryDAO {
   }
 
   hasData () {
-    // console.log(`hasData(): typeof this.data = ${typeof this.data}`)
-    // console.log(`hasData(): this.data.length = ${this.data.length}`)
-    const result = Array.isArray(this.data) && this.data.length > 0
-    // console.log(`hasData() says ${result}`)
-    return result
+    return Array.isArray(this.data) && this.data.length > 0
   }
 
   getData () {
@@ -53,7 +49,6 @@ class CountryDAO {
       }, [])
       return { meta: { min: min, max: max, year: year }, pop: pop }
     })
-    // console.log(`adapt found ${newData.length} records`)
     this.data = newData
   }
 

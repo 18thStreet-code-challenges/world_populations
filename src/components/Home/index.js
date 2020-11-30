@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react'
-// import Tooltip from '@material-ui/core/Tooltip'
 import CountryDAO from 'lib/CountryDAO'
-import Util from 'lib/Util'
 import YearSelector from 'components/YearSelector'
 import BonusControls from 'components/BonusControls'
 import BarChart from 'components/BarChart'
+import PopInfo from 'components/PopInfo'
 import './home.css'
 
-const RESIZE_DELAY = 250
 const CHART_MARGIN = 20
 const WIDE_BARS = 20
 
-const debounce = Util.debounceFactory()
 const Home = () => {
   const [dao] = useState(new CountryDAO())
   const [hasData, setHasData] = useState(false)
@@ -31,12 +28,8 @@ const Home = () => {
         setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
       })
       .catch(e => console.log(e))
-    const debouncedHandleResize = debounce(function handleResize () {
-      setWindowWidth(window.innerWidth - CHART_MARGIN)
-      console.log(`innerWidth = ${window.innerWidth}`)
-    }, RESIZE_DELAY)
 
-    window.addEventListener('resize', debouncedHandleResize)
+    window.addEventListener('resize', handleWindowResize)
     setWindowWidth(window.innerWidth - CHART_MARGIN)
   }, []) // Call once only
 
@@ -54,9 +47,15 @@ const Home = () => {
         setMinPop(dao.getData()[yearIdx].meta.min)
         setMinPopCutoff(dao.getData()[yearIdx].meta.min)
         setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
+        setSkinnyBars(false)
+        setBarHeight(WIDE_BARS)
       }, 300)
     }
   }, [hasData, yearIdx])
+
+  const handleWindowResize = () => {
+    setWindowWidth(window.innerWidth - CHART_MARGIN)
+  }
 
   const filterDataByPopRanges = () => {
     return dao.getData()[yearIdx].pop.filter((item, i) => {
@@ -79,6 +78,7 @@ const Home = () => {
       <div className='chart-container'>
         <div className='year-select'>
           <label>Census Year:</label> <YearSelector stateHandler={setYearIdx} />
+          <PopInfo>Note: Year selection resets bonus controls to their defaults.</PopInfo>
         </div>
         <BonusControls
           minPop={minPop} maxPop={maxPop} minPopCutoff={minPopCutoff}

@@ -2,9 +2,9 @@ import React from 'react'
 import { Slider } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-// import Tooltip from '@material-ui/core/Tooltip'
-import Util from '../../lib/Util'
 import Tooltip from '@material-ui/core/Tooltip'
+import Util from '../../lib/Util'
+import PopInfo from 'components/PopInfo'
 import './bonusControls.css'
 
 const WIDE_BARS = 20
@@ -53,6 +53,14 @@ const BonusControls = ({
               <div className={sliderClasses.root}>
                 <Typography id='range-slider' gutterBottom>
                   Population Range (in mil)
+                  <PopInfo>
+                    The Population Range slider allows you include/exclude population ranges,
+                    <br />causing the display to give greater space to countries in that range.
+                    <br />
+                    <br />It is a dual slider, with grab points at the maximum and the minimum.
+                    <br />
+                    <br />Example: try bringing the maximum closer to the minimum.
+                  </PopInfo>
                 </Typography>
                 <Slider
                   min={minPop}
@@ -83,6 +91,9 @@ const BonusControls = ({
                 setSkinnyBars(checked)
                 setBarHeight(checked ? SKINNY_BARS : WIDE_BARS)
               }} />
+            <PopInfo>
+              Turning on Bird's Eye View makes the Bar Chart small enough to see in a single screen.
+            </PopInfo>
           </div>
         </div>
       </div>
