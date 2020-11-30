@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import CountryDAO from 'lib/CountryDAO'
 import YearSelector from 'components/YearSelector'
 import BonusControls from 'components/BonusControls'
@@ -33,25 +33,23 @@ const Home = () => {
     setWindowWidth(window.innerWidth - CHART_MARGIN)
   }, []) // Call once only
 
+  useLayoutEffect(() => { // useLayoutEffect triggers render when done
+    if (hasData) {
+      setMaxPop(dao.getData()[yearIdx].meta.max)
+      setMinPop(dao.getData()[yearIdx].meta.min)
+      setMinPopCutoff(dao.getData()[yearIdx].meta.min)
+      setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
+      setSkinnyBars(false)
+      setBarHeight(WIDE_BARS)
+    }
+  }, [hasData, yearIdx])
+
   const getData = async () => {
     const json = await dao.retrieve()
     dao.validate(json)
     dao.adapt(json)
     return true
   }
-
-  useEffect(() => {
-    if (hasData) {
-      setTimeout(() => {
-        setMaxPop(dao.getData()[yearIdx].meta.max)
-        setMinPop(dao.getData()[yearIdx].meta.min)
-        setMinPopCutoff(dao.getData()[yearIdx].meta.min)
-        setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
-        setSkinnyBars(false)
-        setBarHeight(WIDE_BARS)
-      }, 300)
-    }
-  }, [hasData, yearIdx])
 
   const handleWindowResize = () => {
     setWindowWidth(window.innerWidth - CHART_MARGIN)
