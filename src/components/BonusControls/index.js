@@ -37,7 +37,7 @@ const BonusControls = ({
   return (
     <div className='accordion'>
       <div className='card'>
-        <div className='card-header' id='headingOne'>
+        <div className='card-header' id='headingOne' data-toggle='collapse' data-target='#collapseOne'>
           <h2 className='mb-0'>
             <button
               className='btn btn-link' type='button' data-toggle='collapse' data-target='#collapseOne'
