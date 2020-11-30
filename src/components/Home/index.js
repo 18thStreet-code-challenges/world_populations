@@ -8,9 +8,9 @@ import './home.css'
 
 const CHART_MARGIN = 20
 const WIDE_BARS = 20
+const dao = new CountryDAO()
 
 const Home = () => {
-  const [dao] = useState(new CountryDAO())
   const [hasData, setHasData] = useState(false)
   const [yearIdx, setYearIdx] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)

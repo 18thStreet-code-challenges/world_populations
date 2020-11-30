@@ -41,8 +41,8 @@ class CountryDAO {
       })
       const pop = json.reduce((accumulator, rec) => {
         const notNull = !!rec[year]
-        const aggregatePop = AGGREGATE_REGIONS.test(rec.Country_Code)
-        if (notNull && !aggregatePop) { // i.e. non null
+        const aggregatePop = AGGREGATE_REGIONS.test(rec.Country_Code) // filter out the aggregat populations
+        if (notNull && !aggregatePop) { // we have data for this year, this country
           accumulator.push({ Country: rec.Country, Country_Code: rec.Country_Code, value: rec[year] })
         }
         return accumulator
@@ -52,6 +52,9 @@ class CountryDAO {
     this.data = newData
   }
 
+  /*
+    validate() completes if the service returns the data we are expecting, throws an Error otherwise
+   */
   validate (json) {
     const badRecordCount = json.filter(rec => {
       return Object.keys(rec).length !== NUM_YEAR_RECORDS
