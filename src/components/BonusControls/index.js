@@ -13,9 +13,9 @@ const SLIDER_WIDTH = 750
 
 const BonusControls = ({
 // eslint-disable-next-line react/prop-types
-  minPop, maxPop, minPopCutoff, maxPopCutoff, skinnyBars,
+  minPop, maxPop, minPopCutoff, maxPopCutoff, birdsEye,
   // eslint-disable-next-line react/prop-types
-  setMinPopCutoff, setMaxPopCutoff, setSkinnyBars, setBarHeight
+  setMinPopCutoff, setMaxPopCutoff, setBirdsEye, setBarHeight
 }) => {
   const sliderStyles = makeStyles({
     root: {
@@ -86,9 +86,9 @@ const BonusControls = ({
             </div>
             <br />
             <label>Bird's Eye View:</label> <input
-              type='checkbox' checked={skinnyBars} onChange={(e) => {
+              type='checkbox' checked={birdsEye} onChange={(e) => {
                 const checked = e.target.checked
-                setSkinnyBars(checked)
+                setBirdsEye(checked)
                 setBarHeight(checked ? SKINNY_BARS : WIDE_BARS)
               }} />
             <PopInfo>

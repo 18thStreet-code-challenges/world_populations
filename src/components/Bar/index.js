@@ -7,7 +7,7 @@ const BAR_COLORS = [{ bg: '#003f5c', fg: 'white' }, { bg: '#bc5090', fg: 'white'
 const HORIZONTAL_CHAR_WIDTH = 8
 
 // eslint-disable-next-line react/prop-types
-const Bar = ({ population, idx, newMax, windowWidth, barHeight, skinnyBars }) => {
+const Bar = ({ population, idx, newMax, windowWidth, barHeight, birdsEye }) => {
   const size = population.value
   const barWidth = (size / newMax) * windowWidth
   const style = {
@@ -15,13 +15,13 @@ const Bar = ({ population, idx, newMax, windowWidth, barHeight, skinnyBars }) =>
     height: barHeight + 'px',
     backgroundColor: BAR_COLORS[idx % 3].bg,
     color: BAR_COLORS[idx % 3].fg,
-    marginBottom: skinnyBars ? '0px' : '2px'
+    marginBottom: birdsEye ? '0px' : '2px'
   }
   const text = `${population.Country_Code} - ${population.Country} - ${Util.millionize(size)} mil`
   const textPixels = text.length * HORIZONTAL_CHAR_WIDTH
   let bar
   switch (true) {
-  case skinnyBars:
+  case birdsEye:
     bar = (
       <div key={'c' + idx}>
         <div className='bar' style={style} title={text} data-tip data-for={`bar${idx}`} />

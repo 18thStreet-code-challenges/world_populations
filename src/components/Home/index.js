@@ -15,7 +15,7 @@ const Home = () => {
   const [yearIdx, setYearIdx] = useState(0)
   const [windowWidth, setWindowWidth] = useState(0)
   const [barHeight, setBarHeight] = useState(WIDE_BARS)
-  const [skinnyBars, setSkinnyBars] = useState(false)
+  const [birdsEye, setBirdsEye] = useState(false)
   const [minPop, setMinPop] = useState(0)
   const [maxPop, setMaxPop] = useState(0)
   const [minPopCutoff, setMinPopCutoff] = useState(0)
@@ -39,7 +39,7 @@ const Home = () => {
       setMinPop(dao.getData()[yearIdx].meta.min)
       setMinPopCutoff(dao.getData()[yearIdx].meta.min)
       setMaxPopCutoff(dao.getData()[yearIdx].meta.max)
-      setSkinnyBars(false)
+      setBirdsEye(false)
       setBarHeight(WIDE_BARS)
     }
   }, [hasData, yearIdx])
@@ -80,14 +80,14 @@ const Home = () => {
         </div>
         <BonusControls
           minPop={minPop} maxPop={maxPop} minPopCutoff={minPopCutoff}
-          maxPopCutoff={maxPopCutoff} skinnyBars={skinnyBars} setMinPopCutoff={setMinPopCutoff}
-          setMaxPopCutoff={setMaxPopCutoff} setSkinnyBars={setSkinnyBars}
+          maxPopCutoff={maxPopCutoff} birdsEye={birdsEye} setMinPopCutoff={setMinPopCutoff}
+          setMaxPopCutoff={setMaxPopCutoff} setBirdsEye={setBirdsEye}
           setBarHeight={setBarHeight} />
         <div className='card'>
           <div className='card-body'>
             <BarChart
               filteredData={filteredData} windowWidth={windowWidth} newMax={newMax}
-              skinnyBars={skinnyBars} barHeight={barHeight} />
+              birdsEye={birdsEye} barHeight={barHeight} />
           </div>
         </div>
       </div>)
