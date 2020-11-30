@@ -23,6 +23,7 @@ This application was written as a programming challenge from [Seegrid](https://s
 2. Node.js *Express* for proxying requests to the REST endpoint (port 5000)
 3. *fetch* api for AJAX calls
 4. React hooks
+5. [Material-ui](https://material-ui.com/) for some UI widgets
 
 ## Stylistic Preferences
 1. I prefer the 'no semicolons' approach favored by [Standard JS](https://standardjs.com).
