@@ -6,7 +6,7 @@ import BarChart from 'components/BarChart'
 import PopInfo from 'components/PopInfo'
 import './home.css'
 
-const CHART_MARGIN = 20
+const CHART_MARGIN = 27
 const WIDE_BARS = 20
 const dao = new CountryDAO()
 
