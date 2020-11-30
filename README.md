@@ -1,5 +1,9 @@
 # World Populations App
 
+## Statement for Seegrid
+The first thing I noticed when looking at the dataset is that its size would make bar chart occupy more than a single screen, making it a visualization challenge for the user.  Next, I noticed that the data was heavily skewed towards a small number of large countries, with a huge gap in population sizes between them and the remaining countries.  I therefore decided to focus on ways to let the user focus in on data subsets, and I put these controls in a *Bonus Features* tab.  In completing the challenge I chose to focus on these concerns instead of tweaking my Bar Chart UI, so the barchart itself is fairly primitive.
+
+## Purpose
 This application was written as a programming challenge from [Seegrid](https://seegrid.com/) in November, 2020. The challenge instructions are [here](https://github.com/gregsandell/world_populations/blob/dev/doc/Problem_Statement_Country_population_chart.pdf).  The code for the solution is at the public repo [gregsandell/world_populations](https://github.com/gregsandell/world_populations).
 
 ## Assumptions
