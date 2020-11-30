@@ -57,7 +57,7 @@ const BonusControls = ({
                     The Population Range slider allows you include/exclude population ranges,
                     <br />causing the display to give greater space to countries in that range.
                     <br />
-                    <br />It is a dual slider, with grab points at the maximum and the minimum.
+                    <br />It is a dual slider, with grab points for the maximum and the minimum.
                     <br />
                     <br />Example: try bringing the maximum closer to the minimum.
                   </PopInfo>
@@ -82,7 +82,9 @@ const BonusControls = ({
               </div>
             </div>
             <div className='slider-right-label'>
-              {`${Util.numberWithCommas(minPopCutoff)} to ${Util.numberWithCommas(maxPopCutoff)}`}
+              <Tooltip title={`${Util.numberWithCommas(minPopCutoff)} to ${Util.numberWithCommas(maxPopCutoff)}`}>
+                <span>{`${Util.millionize(minPopCutoff)} to ${Util.millionize(maxPopCutoff)}`} mil</span>
+              </Tooltip>
             </div>
             <br />
             <label>Bird's Eye View:</label> <input
