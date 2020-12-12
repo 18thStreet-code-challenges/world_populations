@@ -1,7 +1,6 @@
 import fetch from 'node-fetch'
 
 const NUM_YEAR_RECORDS = 59
-const AGGREGATE_REGIONS = /ARB|CEB|CSS|EAP|EAR|EAS|ECA|ECS|EMU|EUU|FCS|HIC|HPC|IBD|IDA|IDB|IBT|IDX|LAC|LCN|LDC|LIC|LMC|LMY|LTE|MEA|MIC|MNA|NAC|ODE|OED|OSS|PRE|PST|SAS|SSA|SSF|TEA|TEC|TLA|TMN|TSA|TSS|UMC|WLD/
 class CountryDAO {
   constructor () {
     this.rawData = []
@@ -32,17 +31,16 @@ class CountryDAO {
       let max = Number.MIN_SAFE_INTEGER
       json.forEach(rec => {
         const notNull = !!rec[year]
-        const aggregatePop = AGGREGATE_REGIONS.test(rec.Country_Code)
 
-        if (notNull && !aggregatePop) { // i.e. non null
+        if (notNull) { // i.e. non null
           if (rec[year] < min) min = rec[year]
           if (rec[year] > max) max = rec[year]
         }
       })
       const pop = json.reduce((accumulator, rec) => {
         const notNull = !!rec[year]
-        const aggregatePop = AGGREGATE_REGIONS.test(rec.Country_Code) // filter out the aggregat populations
-        if (notNull && !aggregatePop) { // we have data for this year, this country
+
+        if (notNull) { // we have data for this year, this country
           accumulator.push({ Country: rec.Country, Country_Code: rec.Country_Code, value: rec[year] })
         }
         return accumulator
@@ -70,7 +68,6 @@ class CountryDAO {
     if (badYearRangeCount > 0) {
       throw new Error(`CountryDAO.validate(): ${badYearRangeCount} countries do not the expected range of records spanning from ${beginYear} to ${endYear}`)
     }
-    // console.log('validate completed without error')
   }
 }
 export default CountryDAO

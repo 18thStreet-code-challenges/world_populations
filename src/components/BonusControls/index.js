@@ -3,23 +3,22 @@ import { Slider } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Tooltip from '@material-ui/core/Tooltip'
-import Util from '../../lib/Util'
+import Util from 'lib/Util'
 import PopInfo from 'components/PopInfo'
+import con from 'lib/consts.js'
 import './bonusControls.css'
-
-const WIDE_BARS = 20
-const SKINNY_BARS = 1
-const SLIDER_WIDTH = 750
 
 const BonusControls = ({
 // eslint-disable-next-line react/prop-types
   minPop, maxPop, minPopCutoff, maxPopCutoff, birdsEye,
   // eslint-disable-next-line react/prop-types
-  setMinPopCutoff, setMaxPopCutoff, setBirdsEye, setBarHeight
+  setMinPopCutoff, setMaxPopCutoff, setBirdsEye, setBarHeight,
+  // eslint-disable-next-line react/prop-types
+  entity, setEntity, ordering, setOrdering
 }) => {
   const sliderStyles = makeStyles({
     root: {
-      width: SLIDER_WIDTH
+      width: con.SLIDER_WIDTH
     }
   })
   const sliderClasses = sliderStyles()
@@ -86,15 +85,59 @@ const BonusControls = ({
                 <span>{`${Util.millionize(minPopCutoff)} to ${Util.millionize(maxPopCutoff)}`} mil</span>
               </Tooltip>
             </div>
-            <br />
+          </div>
+          <div className='filter birdseye'>
             <label>Bird's Eye View:</label> <input
               type='checkbox' checked={birdsEye} onChange={(e) => {
                 const checked = e.target.checked
                 setBirdsEye(checked)
-                setBarHeight(checked ? SKINNY_BARS : WIDE_BARS)
+                setBarHeight(checked ? con.SKINNY_BARS : con.WIDE_BARS)
               }} />
             <PopInfo>
-              Turning on Bird's Eye View makes the Bar Chart small enough to see in a single screen.
+              Turning on Bird's Eye View makes the Bar Chart
+              <br />small enough to see in a single screen.
+            </PopInfo>
+
+          </div>
+          <div className='filter entities'>
+            <label>Entities:</label>
+            <input
+              type='radio' value='entity'
+              checked={entity === con.entity.DEFAULT_COUNTRIES}
+              onChange={() => setEntity(con.entity.DEFAULT_COUNTRIES)} />
+            <label>Countries</label>
+            <input
+              type='radio' value='entity'
+              checked={entity === con.entity.REGIONS}
+              onChange={() => setEntity(con.entity.REGIONS)} />
+            <label>Regions</label>
+            <input
+              type='radio' value='entity'
+              checked={entity === con.entity.BOTH}
+              onChange={() => setEntity(con.entity.BOTH)} />
+            <label>Both</label>
+            <PopInfo>
+              The source data is a mix of Country data, and aggregates
+              <br />by region or economy (for example, "Upper Middle Income"
+              <br />and "Arab World").  This control lets you include or
+              <br />exclude either.
+            </PopInfo>
+          </div>
+          <div className='filter ordering'>
+            <label>Order:</label>
+            <input
+              type='radio' value='ordering'
+              checked={ordering === con.ordering.NAME}
+              onChange={() => setOrdering(con.ordering.NAME)} />
+            <label>By Country Name</label>
+            <input
+              type='radio' value='ordering'
+              checked={ordering === con.ordering.DEFAULT_SIZE}
+              onChange={() => setOrdering(con.ordering.DEFAULT_SIZE)} />
+            <label>By Population Size</label>
+            <PopInfo>
+              Order by size for a cleaner looking display, order by name to
+              <br />look for countries.
             </PopInfo>
           </div>
         </div>
